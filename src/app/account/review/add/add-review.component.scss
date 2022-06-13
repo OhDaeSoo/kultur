@@ -1,0 +1,31 @@
+@import '../../../app.component.scss';
+
+::ng-deep .mat-accent .mat-slider-track-fill,
+::ng-deep .mat-accent .mat-slider-thumb,
+::ng-deep .mat-accent .mat-slider-thumb-label {
+  background-color: $yellow !important;
+}
+
+::ng-deep .mat-accent .mat-slider-thumb-label .mat-slider-thumb-label-text {
+  color: $darkgreylight;
+}
+
+.mat-slider-horizontal {
+  width: 100%;
+}
+
+.noteCriteria {
+  font-family:'Courgette';
+  font-size: 30px;
+  color: $yellow;
+}
+#movieGlobalNote .noteCriteria {
+  font-size: 40px;
+}
+
+.globalNoteBlock {
+  border: 3px dashed $grey;
+  font-family:'Courgette';
+  font-size: 30px;
+  padding: 10px;
+}

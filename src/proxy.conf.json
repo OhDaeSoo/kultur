@@ -1,0 +1,17 @@
+{
+  "/games": {
+    "target": "https://api.igdb.com/v4",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true
+  },
+  "/albums/*": {
+    "target": "https://api.spotify.com/v1",
+    "secure": true,
+    "logLevel": "debug",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/albums/": "/"
+    }
+  }
+}

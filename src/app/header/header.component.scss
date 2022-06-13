@@ -1,0 +1,48 @@
+@import '../app.component.scss';
+
+header .navbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px dashed $grey;
+  padding: .2rem 1rem;
+
+  a.navbar-brand {
+    font-family:'Lobster';
+    font-size: 25px;
+  }
+  a.navbar-brand .logoPart {
+    color: $yellow;
+  }
+
+  .nav-item .nav-link {
+    color: #ffffff;
+    &:hover {
+      color: $yellow;
+      opacity: 1;
+    }
+    &:active, &.active {
+      color: $yellow;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 0px;
+  }
+
+  .has-search .form-control {
+    padding-left: 2.375rem;
+  }
+
+  .has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: $grey;
+  }
+}

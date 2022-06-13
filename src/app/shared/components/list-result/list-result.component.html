@@ -1,0 +1,66 @@
+<ul class="list-group">
+  <li
+  class="list-group-item"
+  *ngFor="let element of elements"
+  (click)="emitElement(element)">
+    <div *ngIf="category === 'movie'">
+      <div class="col-2 pl-0 float-left">
+        <img [src]="element.moviePosterUrl" height="50" width="36" />
+      </div>
+      <div class="col-10 pl-0 float-left">
+        <span class="movieTitle">{{ element.movieTitle }}</span><br/><span class="movieYear">{{ element.movieYear }}</span>
+      </div>
+    </div>
+    <div *ngIf="category === 'game'">
+      <div class="col-2 pl-0 float-left">
+        <img [src]="element.gamePosterUrl" height="50" width="36" />
+      </div>
+      <div class="col-10 pl-0 float-left">
+        <span class="gameTitle">{{ element.gameTitle }}</span><br/><span class="gameYear">{{ element.gameYear }}</span>
+
+        <div [ngSwitch]="element.gamePlatform">
+          <span class="brand-psBlue" *ngSwitchCase="'PlayStation 4'">PS4</span>
+          <span class="brand-psBlue" *ngSwitchCase="'PlayStation Network'">PSN</span>
+          <span class="brand-psBlue" *ngSwitchCase="'PlayStation 3'">PS3</span>
+          <span class="brand-psBlue" *ngSwitchCase="'PlayStation 2'">PS2</span>
+          <span class="brand-ps" *ngSwitchCase="'PlayStation'">PlayStation</span>
+          <span class="brand-psBlue" *ngSwitchCase="'PlayStation Vita'">PS Vita</span>
+          <span class="brand-pc" *ngSwitchCase="'PC (Microsoft Windows)'">PC</span>
+          <span class="brand-xbox" *ngSwitchCase="'Xbox One'">Xbox One</span>
+          <span class="brand-xbox" *ngSwitchCase="'Xbox 360'">Xbox 360</span>
+          <span class="brand-xbox" *ngSwitchCase="'Xbox'">Xbox</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Nintendo Switch'">Switch</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Nintendo 3DS'">3DS</span>
+          <span class="brand-nintendo" *ngSwitchCase="'New Nintendo 3DS'">3DS</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Game Boy'">Game Boy</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Game Boy Color'">Game Boy Color</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Game Boy Advance'">Game Boy Advance</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Wii'">Wii</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Wii U'">Wii U</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Nintendo Entertainment System (NES)'">NES</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Super Nintendo Entertainment System (SNES)'">SNES</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Nintendo N64'">N64</span>
+          <span class="brand-nintendo" *ngSwitchCase="'Nintendo GameCube'">GameCube</span>
+          <span class="brand-sega" *ngSwitchCase="'Sega Mega Drive/Genesis'">Mega Drive/Genesis</span>
+          <span class="brand-sega" *ngSwitchCase="'Sega CD'">Sega CD</span>
+          <span class="brand-sega" *ngSwitchCase="'Sega Saturn'">Saturn</span>
+          <span class="brand-sega" *ngSwitchCase="'Sega Master System'">Master System</span>
+          <span class="brand-sega" *ngSwitchCase="'Sega Game Gear'">Game Gear</span>
+          <span class="brand-sega" *ngSwitchCase="'Dreamcast'">Dreamcast</span>
+          <span class="brand-apple" *ngSwitchCase="'iOS'">iOS</span>
+          <span class="brand-apple" *ngSwitchCase="'Mac'">Mac</span>
+          <span class="brand-android" *ngSwitchCase="'Android'">Android</span>
+          <span *ngSwitchDefault>{{ element.gamePlatform }}</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="category === 'album'">
+      <div class="col-2 pl-0 float-left">
+        <img [src]="element.albumPosterUrl" height="50" width="50" />
+      </div>
+      <div class="col-10 pl-2 float-left">
+        <span class="movieTitle">{{ element.albumTitle }}</span><br/><span class="albumArtist">{{ element.albumArtist }}</span>&nbsp;<span class="movieYear">{{ element.albumYear }}</span>
+      </div>
+    </div>
+  </li>
+</ul>

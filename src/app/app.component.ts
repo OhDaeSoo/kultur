@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'media-avis';
+  title = 'Kult(u)r - Votre point de vue en matière de culture';
 }

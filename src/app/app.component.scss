@@ -1,0 +1,140 @@
+// Colors on App
+$darkgrey: #333B3F;
+$darkgreylight: #474d50;
+$grey: #6c757d;
+$yellow: #f7df09;
+$errorInput: red;
+
+// Native elements
+a {
+  color: $yellow;
+  text-decoration: none;
+}
+
+input:focus, input.focus,
+textarea:focus, textarea.focus {
+  border:1px solid #ffffff;
+  box-shadow: 0px 0px 4px $yellow;
+}
+
+input.error,
+textarea.error {
+  border:1px solid #ffffff;
+  box-shadow: 0px 0px 4px $errorInput;
+}
+
+input[type=radio]:checked, input[type=radio]:focus, input[type=radio].focus,
+input[type=checkbox]:checked, input[type=checkbox]:focus, input[type=checkbox].focus {
+  background-color: $yellow;
+  box-shadow: none;
+  border: none;
+}
+input[type='radio']:checked:after {
+  width: 13px;
+  height: 13px;
+  border-radius: 15px;
+  top: 6px;
+  position: absolute;
+  background-color: $yellow;
+  content: '';
+  display: inline-block;
+  visibility: visible;
+  border: 1px solid white;
+}
+
+// Buttons
+.btn {
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: none;
+  }
+  &:active,
+  &.active {
+    &:focus,
+    &.focus {
+      box-shadow: none !important;
+    }
+  }
+}
+.btn-primary {
+  background-color: $yellow;
+  border-color: $yellow;
+  color: $darkgrey;
+  &:hover {
+    color: #ffffff;
+  }
+  &:active,
+  &.active {
+    opacity: 1;
+    &:focus,
+    &.focus {
+      background-color:$yellow;
+      border-color: $yellow;
+    }
+  }
+}
+
+.btn-outline-success {
+  color: $yellow;
+  border-color: $yellow;
+  &:hover,
+  &:active,
+  &.active {
+    background-color: $yellow;
+    color: $darkgrey;
+    &:focus,
+    &.focus {
+      background-color: $yellow;
+      border-color: $yellow;
+    }
+  }
+}
+
+// Misc
+.clear {
+  clear: both;
+}
+
+.userAvatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid $grey;
+}
+
+.loadingDots {
+  animation: blinker 0.5s linear infinite;
+  color: #b7a307;
+  font-weight: bold;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+
+// Layers
+main {
+  background-color: $darkgreylight;
+  padding-bottom: 30px;
+}
+
+footer {
+  padding: 10px;
+  width: 100%;
+  color: $grey;
+  font-size: 10px;
+  border-top: 1px dashed $grey;
+
+  a {
+    color:$grey;
+    font-weight: bold;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

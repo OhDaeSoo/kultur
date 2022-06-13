@@ -1,0 +1,95 @@
+<div class="container">
+  <br/>
+  <div class="row">
+    <div class="col-6 mx-auto">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="userEmail">Adresse mail</label>
+          <input
+          type="email"
+          class="form-control"
+          id="userEmail"
+          aria-describedby="aideUserEmail"
+          formControlName="userEmail"
+          [ngClass]="{'error' : userForm.get('userEmail').touched && !userForm.get('userEmail').valid}"
+          required>
+          <small *ngIf="userForm.get('userEmail').touched && !userForm.get('userEmail').valid && userForm.get('userEmail').value === ''" class="text-danger">
+            Merci de saisir un email
+          </small>
+          <small *ngIf="userForm.get('userEmail').touched && !userForm.get('userEmail').valid && userForm.get('userEmail').value !== ''" class="text-danger">
+            Erreur sur le format de votre email
+          </small>
+          <small id="aideUserEmail" class="form-text text-muted">Nous ne partagerons jamais votre email avec qui que ce soit.</small>
+        </div>
+        <div class="form-group">
+          <label for="userPassword">Mot de passe</label>
+          <input
+          type="password"
+          class="form-control"
+          id="userPassword"
+          formControlName="userPassword"
+          [ngClass]="{'error' : userForm.get('userPassword').touched && !userForm.get('userPassword').valid}"
+          required>
+          <small *ngIf="userForm.get('userPassword').touched && !userForm.get('userPassword').valid && userForm.get('userPassword').value === ''" class="text-danger">
+            Merci de saisir un mot de passe
+          </small>
+          <small *ngIf="userForm.get('userPassword').touched && !userForm.get('userPassword').valid && userForm.get('userPassword').value !== ''" class="text-danger">
+            Votre mot de passe doit contenir au moins {{ this.nbMinCharsForPwd }} caractères
+          </small>
+        </div>
+        <div class="form-group" *ngIf="!loginModeBtn">
+          <label for="userPseudo">Pseudonyme</label>
+          <input
+          type="text"
+          class="form-control"
+          id="userPseudo"
+          aria-describedby="aideUserPseudo"
+          formControlName="userPseudo"
+          [ngClass]="{'error' : userForm.get('userPseudo').touched && !userForm.get('userPseudo').valid}"
+          required>
+          <small *ngIf="userForm.get('userPseudo').touched && !userForm.get('userPseudo').valid && userForm.get('userPseudo').value === ''" class="text-danger">
+            Merci de saisir un pseudo
+          </small>
+          <small id="aideUserPseudo" class="form-text text-muted">Votre pseudo sera visible par les autres utilisateurs</small>
+        </div>
+        <div class="form-row" *ngIf="!loginModeBtn">
+          <div class="col-md-11">
+            <label for="userUrlAvatar">Url vers une photo de profil</label>
+            <input
+            type="text"
+            class="form-control"
+            id="userUrlAvatar"
+            aria-describedby="aideUserUrlAvatar"
+            formControlName="userUrlAvatar">
+          </div>
+          <div class="col-md-1 position-relative">
+            <img
+            *ngIf="userForm.get('userUrlAvatar').value !== ''"
+            [src]="userForm.get('userUrlAvatar').value"
+            class="userAvatar position-absolute fixed-bottom mb-1">
+          </div>
+          <div class="col-md-12">
+            <small id="aideUserUrlAvatar" class="form-text text-muted">Ne stockant aucune image sur serveur, renseignez ici une url de la photo de votre profil Linkedin, facebook etc.</small>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="!loginModeBtn">
+          <label for="userDesc">Un court descriptif</label>
+          <textarea
+          class="form-control"
+          id="userDesc"
+          aria-describedby="aideUserDesc"
+          formControlName="userDesc"></textarea>
+          <small id="aideUserDesc" class="form-text text-muted">Ne faites pas votre timide et parlez-nous de vous !</small>
+        </div>
+        <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!userForm.valid">{{ labelBtnLogin }}</button> |
+        <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="switchStateBtn()">{{ labelHelpBtnLogin }}</button>
+      </form>
+    </div>
+  </div>
+</div>

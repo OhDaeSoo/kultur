@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'media-avis'`, () => {
+  it(`should have as title 'kultur'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('media-avis');
+    expect(app.title).toEqual('kultur');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('media-avis app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('kultur app is running!');
   });
 });

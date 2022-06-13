@@ -1,0 +1,475 @@
+<div class="container">
+  <div class="row">
+    <div class="col-6 mx-auto mt-4">
+      <h3><i class="fas fa-bullhorn"></i> Déposer un avis</h3>
+      <hr/>
+      <form [formGroup]="addReviewForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="categoriesBlock">Vous voulez nous parler de quoi ?</label>
+          <div id="categoriesBlock">
+            <div class="form-check form-check-inline" *ngFor="let category of categories; let i = index">
+              <input
+              type="radio"
+              class="form-check-input"
+              formControlName="addReviewCategory"
+              id="addReviewCategory_{{ category.cat }}"
+              [value]="category.cat"
+              (click)="buildAndDisplayCategoryForm(category.cat)">
+              <label class="form-check-label" for="addReviewCategory_{{ category.cat }}">{{ category.title }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="displayMovieDetails" formGroupName="addReviewDetails">
+          <hr/>
+          <div class="form-group mt-4">
+            <div class="float-left col-8 pl-0">
+              <label for="movieFind"><i class="fas fa-caret-right"></i> Sélection de votre film</label>
+              <div id="movieFind">
+                <input
+                type="text"
+                placeholder="Chercher un film"
+                formControlName="movieTitle"
+                (keyup)="onTypingRef($event, 'movie')"
+                class="form-control col-sm-9 float-left">
+                <button
+                type="button"
+                [disabled]="!addReviewForm.get('addReviewDetails').get('movieTitle').valid"
+                class="btn btn-outline-success col-sm-2 float-right"
+                (click)="onSearch(addReviewForm.get('addReviewDetails').get('movieTitle').value, 'movie')">
+                  <span class="loadingDots" *ngIf="isLoading">...</span>
+                  <span *ngIf="!isLoading">OK</span>
+                </button>
+              </div>
+              <div *ngIf="showResults">
+                <div class="clear"></div>
+                <app-list-result
+                (elementClicked)="treatElement($event)"
+                category="movie"
+                [elements]="listMoviesRet"></app-list-result>
+              </div>
+            </div>
+            <div class="float-right col-4 pl-0">
+                <img
+                [src]="addReviewForm.get('addReviewDetails').get('moviePosterUrl').value"
+                *ngIf="addReviewForm.get('addReviewDetails').get('moviePosterUrl').value !== ''"
+                width="172"
+                height="256" />
+                <div
+                *ngIf="addReviewForm.get('addReviewDetails').get('moviePosterUrl').value === ''"
+                style="width: 172px; height: 256px; background-color: #333B3F;">
+                  <div class="m-auto" style="height: 70px; width: 70px; text-align: center; font-size: 30pt;">
+                    <i class="fas fa-video" style="color: #474d50;"></i>
+                  </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="form-group">
+            <label for="movieScenarioNote"><i class="fas fa-caret-right"></i> Note du scénario</label>
+            <div id="movieScenarioNote">
+              <div class="float-left">Complétement fou ou il tenait sur un post-it ?</div>
+              <div class="noteCriteria float-right">{{ movieScenarioNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="movieScenarioNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'movie', 'movieScenarioNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="movieDirectionNote"><i class="fas fa-caret-right"></i> Note de la mise en scène</label>
+            <div id="movieDirectionNote">
+              <div class="float-left">La direction des acteurs, le mouvement étaient bien ou... pas ?</div>
+              <div class="noteCriteria float-right">{{ movieDirectionNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="movieDirectionNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'movie', 'movieDirectionNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="movieActorsNote"><i class="fas fa-caret-right"></i> Note des acteurs</label>
+            <div id="movieActorsNote">
+              <div class="float-left">Stars du tapis rouge ou débutants, ils étaient bons ?</div>
+              <div class="noteCriteria float-right">{{ movieActorsNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="movieActorsNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'movie', 'movieActorsNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="movieMusicNote"><i class="fas fa-caret-right"></i> Note de la bande originale</label>
+            <div id="movieMusicNote">
+              <div class="float-left">A vous de voir si c'est plus Ennio que Morricone...</div>
+              <div class="noteCriteria float-right">{{ movieMusicNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="movieMusicNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'movie', 'movieMusicNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="movieSetsNote"><i class="fas fa-caret-right"></i> Note des décors</label>
+            <div id="movieSetsNote">
+              <div class="float-left">Ca en jette ou ça sent le papier peint pendant 2h ?</div>
+              <div class="noteCriteria float-right">{{ movieSetsNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="movieSetsNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'movie', 'movieSetsNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group globalNoteBlock">
+            <div id="movieGlobalNote">
+              <div class="float-left">Votre note globale : </div>
+              <div class="noteCriteria float-right">{{ movieGlobalNote }}/5</div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="clear"></div>
+          <div class="form-group">
+            <label for="movieReview"><i class="fas fa-caret-right"></i> Ne soyez pas timide et parlez-nous de ce film</label>
+            <div id="movieReview">
+              <textarea
+              class="form-control"
+              id="story"
+              name="story"
+              formControlName="movieReview"
+              rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="displayAlbumDetails" formGroupName="addReviewDetails">
+          <hr/>
+          <div class="form-group mt-4">
+            <div class="float-left col-8 pl-0">
+              <label for="albumFind"><i class="fas fa-caret-right"></i> Sélection de votre album</label>
+              <div id="albumFind">
+                <input
+                type="text"
+                placeholder="Chercher un album"
+                formControlName="albumTitle"
+                (keyup)="onTypingRef($event, 'album')"
+                class="form-control col-sm-9 float-left">
+                <button
+                type="button"
+                [disabled]="!addReviewForm.get('addReviewDetails').get('albumTitle').valid"
+                class="btn btn-outline-success col-sm-2 float-right"
+                (click)="onSearch(addReviewForm.get('addReviewDetails').get('albumTitle').value, 'album')">
+                  <span class="loadingDots" *ngIf="isLoading">...</span>
+                  <span *ngIf="!isLoading">OK</span>
+                </button>
+              </div>
+              <div *ngIf="showResults">
+                <div class="clear"></div>
+                <app-list-result
+                (elementClicked)="treatElement($event)"
+                category="album"
+                [elements]="listAlbumsRet"></app-list-result>
+              </div>
+            </div>
+            <div class="float-right col-4 pl-0">
+                <img
+                [src]="addReviewForm.get('addReviewDetails').get('albumPosterUrl').value"
+                *ngIf="addReviewForm.get('addReviewDetails').get('albumPosterUrl').value !== ''"
+                width="172"
+                height="172" />
+                <div
+                *ngIf="addReviewForm.get('addReviewDetails').get('albumPosterUrl').value === ''"
+                style="width: 172px; height: 172px; background-color: #333B3F;">
+                  <div class="m-auto" style="height: 70px; width: 70px; text-align: center; font-size: 30pt;">
+                    <i class="fas fa-compact-disc" style="color: #474d50;"></i>
+                  </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="form-group">
+            <label for="albumAmbianceNote"><i class="fas fa-caret-right"></i> Note de l'ambiance</label>
+            <div id="albumAmbianceNote">
+              <div class="float-left">Un disque vraiment réussi avec une forte atmosphère ?</div>
+              <div class="noteCriteria float-right">{{ albumAmbianceNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="albumAmbianceNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'album', 'albumAmbianceNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="albumCompositionNote"><i class="fas fa-caret-right"></i> Note des compositions</label>
+            <div id="albumCompositionNote">
+              <div class="float-left">A vous de voir ici la qualité des morceaux</div>
+              <div class="noteCriteria float-right">{{ albumCompositionNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="albumCompositionNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'album', 'albumCompositionNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="albumArrangementsNote"><i class="fas fa-caret-right"></i> Note des arrangements</label>
+            <div id="albumArrangementsNote">
+              <div class="float-left">Du sur mesure ou plutôt très voir trop épuré ?</div>
+              <div class="noteCriteria float-right">{{ albumArrangementsNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="albumArrangementsNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'album', 'albumArrangementsNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="albumTextsNote"><i class="fas fa-caret-right"></i> Note des textes</label>
+            <div id="albumTextsNote">
+              <div class="float-left">J'ai pas retenu les textes ou ca m'a carrément parlé</div>
+              <div class="noteCriteria float-right">{{ albumTextsNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="albumTextsNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'album', 'albumTextsNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="albumVocalsNote"><i class="fas fa-caret-right"></i> Note des voix</label>
+            <div id="albumVocalsNote">
+              <div class="float-left">Vraiment sympa ou éprouvant pour les oreilles ?</div>
+              <div class="noteCriteria float-right">{{ albumVocalsNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="albumVocalsNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'album', 'albumVocalsNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group globalNoteBlock">
+            <div id="albumGlobalNote">
+              <div class="float-left">Votre note globale : </div>
+              <div class="noteCriteria float-right">{{ albumGlobalNote }}/5</div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="clear"></div>
+          <div class="form-group">
+            <label for="albumReview"><i class="fas fa-caret-right"></i> Ne soyez pas timide et parlez-nous de cet album</label>
+            <div id="albumReview">
+              <textarea
+              class="form-control"
+              id="story"
+              name="story"
+              formControlName="albumReview"
+              rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="displayGameDetails" formGroupName="addReviewDetails">
+          <hr/>
+          <div class="form-group mt-4">
+            <div class="float-left col-8 pl-0">
+              <label for="gameFind"><i class="fas fa-caret-right"></i> Sélection de votre jeu vidéo</label>
+              <div id="gameFind">
+                <input
+                type="text"
+                placeholder="Chercher un jeu"
+                formControlName="gameTitle"
+                (keyup)="onTypingRef($event, 'game')"
+                class="form-control col-sm-9 float-left">
+                <button
+                type="button"
+                [disabled]="!addReviewForm.get('addReviewDetails').get('gameTitle').valid"
+                class="btn btn-outline-success col-sm-2 float-right"
+                (click)="onSearch(addReviewForm.get('addReviewDetails').get('gameTitle').value, 'game')">
+                <span class="loadingDots" *ngIf="isLoading">...</span>
+                <span *ngIf="!isLoading">OK</span>
+                </button>
+              </div>
+              <div *ngIf="showResults">
+                <div class="clear"></div>
+                <app-list-result
+                (elementClicked)="treatElement($event)"
+                category="game"
+                [elements]="listGamesRet"></app-list-result>
+              </div>
+            </div>
+            <div class="float-right col-4 pl-0">
+                <img
+                [src]="addReviewForm.get('addReviewDetails').get('gamePosterUrl').value"
+                *ngIf="addReviewForm.get('addReviewDetails').get('gamePosterUrl').value !== ''"
+                width="172"
+                height="256" />
+                <div
+                *ngIf="addReviewForm.get('addReviewDetails').get('gamePosterUrl').value === ''"
+                style="width: 172px; height: 256px; background-color: #333B3F;">
+                  <div class="m-auto" style="height: 70px; width: 70px; text-align: center; font-size: 30pt;">
+                    <i class="fas fa-gamepad" style="color: #474d50;"></i>
+                  </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="form-group">
+            <label for="gameStoryNote"><i class="fas fa-caret-right"></i> Note de l'histoire</label>
+            <div id="gameStoryNote">
+              <div class="float-left">Une histoire qui habite encore mes pensées ou que j'ai déjà zappée ?</div>
+              <div class="noteCriteria float-right">{{ gameStoryNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="gameStoryNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'game', 'gameStoryNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gameCharactersNote"><i class="fas fa-caret-right"></i> Note des personnages</label>
+            <div id="gameCharactersNote">
+              <div class="float-left">Charismatiques et forts ou à oublier immédiatement</div>
+              <div class="noteCriteria float-right">{{ gameCharactersNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="gameCharactersNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'game', 'gameCharactersNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gameMusicNote"><i class="fas fa-caret-right"></i> Note des musiques</label>
+            <div id="gameMusicNote">
+              <div class="float-left">Je veux l'album en vinyle, CD, cassette ou.. j'ai même pas fait gaffe</div>
+              <div class="noteCriteria float-right">{{ gameMusicNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="gameMusicNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'game', 'gameMusicNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gameSetsNote"><i class="fas fa-caret-right"></i> Note des décors</label>
+            <div id="gameSetsNote">
+              <div class="float-left">Une DA et des décors somptueux qui m'ont marqué.. ou pas</div>
+              <div class="noteCriteria float-right">{{ gameSetsNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="gameSetsNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'game', 'gameSetsNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gameRhythmNote"><i class="fas fa-caret-right"></i> Note du rythme</label>
+            <div id="gameRhythmNote">
+              <div class="float-left">Je ne me suis pas embêté une minute ou j'ai maté la montre tout le temps</div>
+              <div class="noteCriteria float-right">{{ gameRhythmNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="gameRhythmNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'game', 'gameRhythmNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="gameTechnicalNote"><i class="fas fa-caret-right"></i> Note technique</label>
+            <div id="gameTechnicalNote">
+              <div class="float-left">En vrai j'aurais préféré un patch de 2Go day one ou RAS ?</div>
+              <div class="noteCriteria float-right">{{ gameTechnicalNote }}/5</div>
+              <mat-slider
+              [min]="0"
+              [max]="5"
+              [step]="1"
+              formControlName="gameTechnicalNote"
+              thumbLabel
+              (change)="displayNoteAndComputeTotalNote($event, 'game', 'gameTechnicalNote')"
+              ></mat-slider>
+            </div>
+          </div>
+          <div class="form-group globalNoteBlock">
+            <div id="gameGlobalNote">
+              <div class="float-left">Votre note globale : </div>
+              <div class="noteCriteria float-right">{{ gameGlobalNote }}/5</div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="clear"></div>
+          <div class="form-group">
+            <label for="gameReview"><i class="fas fa-caret-right"></i> Ne soyez pas timide et parlez-nous de ce jeu</label>
+            <div id="gameReview">
+              <textarea
+              class="form-control"
+              id="story"
+              name="story"
+              formControlName="gameReview"
+              rows="5"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="clear"></div>
+        <hr/>
+        <div class="clear"></div>
+        <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!addReviewForm.valid">{{ labelBtnAddReview }}</button> |
+        <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="reinitForm()">{{ labelBtnReinit }}</button>
+      </form>
+    </div>
+  </div>
+</div>

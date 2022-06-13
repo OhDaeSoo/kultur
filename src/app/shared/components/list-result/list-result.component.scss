@@ -1,0 +1,65 @@
+@import '../../../app.component.scss';
+
+.list-group {
+  max-height: 300px;
+  overflow-y: scroll;
+
+  .list-group-item {
+    background-color: $darkgrey;
+    color: $yellow;
+    cursor: pointer;
+
+    span.movieTitle,
+    span.gameTitle,
+    span.albumTitle {
+      color: $yellow;
+    }
+
+    span.movieYear,
+    span.gameYear,
+    span.albumYear,
+    span.albumArtist {
+      color: $yellow;
+      font-weight: lighter;
+      font-size: small;
+    }
+
+    span.brand-psBlue,
+    span.brand-ps,
+    span.brand-pc,
+    span.brand-xbox,
+    span.brand-nintendo,
+    span.brand-sega,
+    span.brand-apple,
+    span.brand-android {
+      color: #ffffff;
+      font-size: small;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    span.brand-psBlue {
+      background-color: #0F056B;
+    }
+    span.brand-ps {
+      background-color: darkgrey;
+    }
+    span.brand-pc {
+      background-color: black;
+    }
+    span.brand-xbox {
+      background-color: #9BC848;
+    }
+    span.brand-nintendo {
+      background-color: #FE0016;
+    }
+    span.brand-sega {
+      background-color: #17569B;
+    }
+    span.brand-apple {
+      background-color: #333333;
+    }
+    span.brand-android {
+      background-color: #3DDC84;
+    }
+  }
+}
